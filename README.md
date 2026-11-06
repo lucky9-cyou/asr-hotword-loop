@@ -1,8 +1,28 @@
-# ASR Hotword Loop · 越听，越懂你
+# ECHO
+
+**Explanations as Context for Hotword Optimization in Speech Recognition**
+
+> 越听，越懂你。把一次解释，变成下一次识别的记忆。
 
 把一次解释，变成下一次识别的记忆。每次提交一段完整音频，Qwen3-ASR 使用已有热词完成识别，Qwen LLM 理解转写并更新热词库，供下一次调用使用。
 
 **统一流程，可反复调用；不自动切块、不做伪流式，也不区分“提取模式”和“识别模式”。**
+
+## 论文与目录
+
+论文先以 Markdown 撰写：[论文入口](paper/README.md) · [Introduction](paper/introduction.md) · [Related Work](paper/related_work.md)。
+
+```text
+paper/                   论文草稿、引用和 Agent/端到端研究计划
+benchmarks/echo_bench/    评测协议与开发样例（非正式测试集）
+scripts/                 真实模型验证脚本
+artifacts/verification/  演示验证记录，不作为论文实验结果
+static/                  Demo 页面及合成语音样例
+server.py                会话与完整音频调用 API
+asr_engine.py            Qwen3-ASR 解码和 token 偏置
+llm_engine.py            解释理解、热词提取和当前 prompt
+tests/                   API 隔离测试
+```
 
 ## 启动
 
@@ -56,7 +76,7 @@ LLM_MODEL=/workspace/model/Qwen3-4B-Instruct-2507 ./run.sh
 
 图表展示同一音频、同一偏置解码前缀下，加偏置前后的完整词表 softmax 概率。只显示部分候选，不重新归一化；不是整词置信度，也不是两条独立转写路径的整体概率。无偏置/有偏置转写则分别由 greedy decode 得到，双路推理有额外耗时。
 
-真实示例曾验证 bias=8 使两处“李旭”变为“李煦”；首个“煦”token 概率从 0.0785% 到 70.0729%，详见 `static/samples/evaluation.json`。该效果不代表任意音频都会改善。
+真实示例曾验证 bias=8 使两处“李旭”变为“李煦”；首个“煦”token 概率从 0.0785% 到 70.0729%，详见 [偏置校准记录](artifacts/verification/asr-bias-calibration.json)。该效果不代表任意音频都会改善。
 
 ## API 与验证
 
@@ -73,10 +93,10 @@ LLM_MODEL=/workspace/model/Qwen3-4B-Instruct-2507 ./run.sh
 # API 隔离测试（测试替身，不加载模型）
 ../envs/lm-tts/bin/python -m pytest tests/test_server.py -q
 # 真模型检查，需要已启动服务、GPU 和预热
-../envs/lm-tts/bin/python verify_prompt.py
-../envs/lm-tts/bin/python verify_live.py
+../envs/lm-tts/bin/python scripts/verify_prompt.py
+../envs/lm-tts/bin/python scripts/verify_live.py
 ```
 
-`prompt-verification.json` 记录新提示词实际回归结果；`live-verification.json` 记录完整音频连续调用结果。`llm-verification.json` 保留早期提示词测试历史，不代表当前提示词表现。
+[prompt-verification.json](artifacts/verification/prompt-verification.json) 记录新提示词实际回归结果；[live-verification.json](artifacts/verification/live-verification.json) 记录完整音频连续调用结果。[早期 LLM 记录](artifacts/verification/history/llm-verification.json) 保留早期提示词测试历史，不代表当前提示词表现。
 
 当前版本已通过 18 项 API 隔离测试和 7 个真实 Qwen3.8-27B 提示词回归，包括解释词也被错写、明确否定、无解释的姓名提取和普通句不提取。上述案例通过不代表所有歧义输入都能正确恢复。

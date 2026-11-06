@@ -16,7 +16,7 @@ import numpy as np
 import soundfile as sf
 
 ROOT = Path(__file__).resolve().parent
-app = FastAPI(title="Qwen 热词实验室")
+app = FastAPI(title="ECHO · Explanations as Context for Hotword Optimization")
 app.mount('/static', StaticFiles(directory=ROOT/'static'), name='static')
 ASR_MODEL = os.getenv('ASR_MODEL', '/workspace/model/Qwen3-ASR-0.6B')
 LLM_MODEL = os.getenv('LLM_MODEL', '/workspace/model/Qwen3.8-27B')

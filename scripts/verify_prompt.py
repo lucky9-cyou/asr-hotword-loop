@@ -33,6 +33,8 @@ if __name__ == '__main__':
             result=dict(text=text,expected=expected,words=words,passed=passed,result=data)
             results.append(result)
             print(json.dumps({k:result[k] for k in ('text','expected','words','passed')},ensure_ascii=False),flush=True)
-    Path(__file__).with_name('prompt-verification.json').write_text(json.dumps(results,ensure_ascii=False,indent=2))
-    assert all(x['passed'] for x in results), 'See prompt-verification.json for failures'
+    report_dir=Path(__file__).resolve().parents[1]/'artifacts/verification'
+    report_dir.mkdir(parents=True,exist_ok=True)
+    (report_dir/'prompt-verification.json').write_text(json.dumps(results,ensure_ascii=False,indent=2))
+    assert all(x['passed'] for x in results), 'See artifacts/verification/prompt-verification.json for failures'
     print('PROMPT REGRESSIONS PASS',flush=True)
