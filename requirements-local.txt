@@ -1,6 +1,6 @@
 # Added to .deps; base environment: ../envs/lm-tts (Python 3.11)
 qwen-asr==0.0.6
-transformers==4.57.6
+transformers==5.10.1
 nagisa==0.2.11
 soynlp==0.0.493
 qwen-omni-utils==0.0.9
