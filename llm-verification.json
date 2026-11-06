@@ -1,0 +1,223 @@
+[
+  {
+    "text": "我叫李旭，是春风和煦的煦。",
+    "result": {
+      "hotwords": [
+        {
+          "word": "李煦",
+          "evidence": "我叫李旭，是春风和煦的煦",
+          "reason": "春风和煦确定名字用煦，替换旭，姓李不变",
+          "updated_at": 1793954795.7101731,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "updates": [
+        {
+          "action": "add",
+          "word": "李煦",
+          "evidence": "我叫李旭，是春风和煦的煦",
+          "reason": "春风和煦确定名字用煦，替换旭，姓李不变",
+          "updated_at": 1793954795.7101731,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "llm": {
+        "candidates": [
+          {
+            "word": "李煦",
+            "evidence": "我叫李旭，是春风和煦的煦",
+            "reason": "春风和煦确定名字用煦，替换旭，姓李不变"
+          }
+        ],
+        "raw_output": "{\"candidates\":[{\"evidence\":\"我叫李旭，是春风和煦的煦\",\"reason\":\"春风和煦确定名字用煦，替换旭，姓李不变\",\"word\":\"李煦\"}]}",
+        "model": "Qwen3.8-27B",
+        "elapsed_ms": 4467.6,
+        "warnings": [],
+        "source": "local_llm",
+        "device": "cuda:1"
+      }
+    }
+  },
+  {
+    "text": "我叫王丽，是茉莉的莉。",
+    "result": {
+      "hotwords": [
+        {
+          "word": "王莉",
+          "evidence": "我叫王丽，是茉莉的莉",
+          "reason": "茉莉确定名字用莉，替换丽，姓王不变",
+          "updated_at": 1793954807.2574928,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "updates": [
+        {
+          "action": "add",
+          "word": "王莉",
+          "evidence": "我叫王丽，是茉莉的莉",
+          "reason": "茉莉确定名字用莉，替换丽，姓王不变",
+          "updated_at": 1793954807.2574928,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "llm": {
+        "candidates": [
+          {
+            "word": "王莉",
+            "evidence": "我叫王丽，是茉莉的莉",
+            "reason": "茉莉确定名字用莉，替换丽，姓王不变"
+          }
+        ],
+        "raw_output": "{\"candidates\":[{\"evidence\":\"我叫王丽，是茉莉的莉\",\"reason\":\"茉莉确定名字用莉，替换丽，姓王不变\",\"word\":\"王莉\"}]}",
+        "model": "Qwen3.8-27B",
+        "elapsed_ms": 4279.8,
+        "warnings": [],
+        "source": "local_llm",
+        "device": "cuda:1"
+      }
+    }
+  },
+  {
+    "text": "今天我们讨论一下天气。",
+    "result": {
+      "hotwords": [],
+      "updates": [],
+      "llm": {
+        "candidates": [],
+        "raw_output": "{\"candidates\":[]}",
+        "model": "Qwen3.8-27B",
+        "elapsed_ms": 1057.7,
+        "warnings": [],
+        "source": "local_llm",
+        "device": "cuda:1"
+      }
+    }
+  },
+  {
+    "text": "我叫李旭，姓李。旭是春风和煦的旭。",
+    "result": {
+      "hotwords": [
+        {
+          "word": "李旭",
+          "evidence": "我叫李旭，姓李。旭是春风和煦的旭",
+          "reason": "春风和煦确定名字用旭，替换可能的同音字，姓李不变",
+          "updated_at": 1793954847.4561477,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "updates": [
+        {
+          "action": "add",
+          "word": "李旭",
+          "evidence": "我叫李旭，姓李。旭是春风和煦的旭",
+          "reason": "春风和煦确定名字用旭，替换可能的同音字，姓李不变",
+          "updated_at": 1793954847.4561477,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "llm": {
+        "candidates": [
+          {
+            "word": "李旭",
+            "evidence": "我叫李旭，姓李。旭是春风和煦的旭",
+            "reason": "春风和煦确定名字用旭，替换可能的同音字，姓李不变"
+          }
+        ],
+        "raw_output": "{\"candidates\":[{\"evidence\":\"我叫李旭，姓李。旭是春风和煦的旭\",\"reason\":\"春风和煦确定名字用旭，替换可能的同音字，姓李不变\",\"word\":\"李旭\"}]}",
+        "model": "Qwen3.8-27B",
+        "elapsed_ms": 5443.6,
+        "warnings": [],
+        "source": "local_llm",
+        "device": "cuda:1"
+      }
+    }
+  },
+  {
+    "text": "我姓李，名字的第二个字是春风和煦的最后一个字。",
+    "result": {
+      "hotwords": [
+        {
+          "word": "李煦",
+          "evidence": "我姓李，名字的第二个字是春风和煦的最后一个字",
+          "reason": "春风和煦的最后一个字是煦，确定名字用煦，姓李不变",
+          "updated_at": 1793954926.673217,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "updates": [
+        {
+          "action": "add",
+          "word": "李煦",
+          "evidence": "我姓李，名字的第二个字是春风和煦的最后一个字",
+          "reason": "春风和煦的最后一个字是煦，确定名字用煦，姓李不变",
+          "updated_at": 1793954926.673217,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "llm": {
+        "candidates": [
+          {
+            "word": "李煦",
+            "evidence": "我姓李，名字的第二个字是春风和煦的最后一个字",
+            "reason": "春风和煦的最后一个字是煦，确定名字用煦，姓李不变"
+          }
+        ],
+        "raw_output": "{\"candidates\":[{\"evidence\":\"我姓李，名字的第二个字是春风和煦的最后一个字\",\"reason\":\"春风和煦的最后一个字是煦，确定名字用煦，姓李不变\",\"word\":\"李煦\"}]}",
+        "model": "Qwen3.8-27B",
+        "elapsed_ms": 5506.5,
+        "warnings": [],
+        "source": "local_llm",
+        "device": "cuda:1"
+      }
+    }
+  },
+  {
+    "text": "我叫李煦，煦是春风和煦的煦，不是旭日东升的旭。",
+    "result": {
+      "hotwords": [
+        {
+          "word": "李煦",
+          "evidence": "我叫李煦，煦是春风和煦的煦，不是旭日东升的旭",
+          "reason": "春风和煦确定名字用煦，排除旭，姓李不变",
+          "updated_at": 1793954943.4252982,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "updates": [
+        {
+          "action": "add",
+          "word": "李煦",
+          "evidence": "我叫李煦，煦是春风和煦的煦，不是旭日东升的旭",
+          "reason": "春风和煦确定名字用煦，排除旭，姓李不变",
+          "updated_at": 1793954943.4252982,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "llm": {
+        "candidates": [
+          {
+            "word": "李煦",
+            "evidence": "我叫李煦，煦是春风和煦的煦，不是旭日东升的旭",
+            "reason": "春风和煦确定名字用煦，排除旭，姓李不变"
+          }
+        ],
+        "raw_output": "{\"candidates\":[{\"evidence\":\"我叫李煦，煦是春风和煦的煦，不是旭日东升的旭\",\"reason\":\"春风和煦确定名字用煦，排除旭，姓李不变\",\"word\":\"李煦\"}]}",
+        "model": "Qwen3.8-27B",
+        "elapsed_ms": 5587.6,
+        "warnings": [],
+        "source": "local_llm",
+        "device": "cuda:1"
+      }
+    }
+  }
+]

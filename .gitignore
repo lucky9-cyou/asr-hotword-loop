@@ -1,0 +1,10 @@
+.deps/
+__pycache__/
+.pytest_cache/
+tmp/
+*.log
+*.pid
+
+.env
+.env.*
+!.env.example

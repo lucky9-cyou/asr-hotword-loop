@@ -1,0 +1,18 @@
+{
+  "source": "synthetic speech generated locally with Qwen3-TTS",
+  "model": "/workspace/model/Qwen3-TTS-12Hz-1.7B-CustomVoice",
+  "speaker": "Vivian",
+  "sample_rate": 24000,
+  "generation": {
+    "do_sample": false,
+    "max_new_tokens": 240
+  },
+  "intro": "我姓李，名字的第二个字是春风和煦的最后一个字。",
+  "followup": "请把这份文件交给李煦，明天李煦会来开会。",
+  "note": "Synthetic demo audio, not a human recording. Written name uses 煦; ASR may transcribe homophones.",
+  "intro_asr_verified": "我姓李，名字的第二个字是春风和煦的最后一个字。",
+  "intro_generation": {
+    "do_sample": false,
+    "max_new_tokens": 260
+  }
+}

@@ -1,0 +1,9 @@
+# Added to .deps; base environment: ../envs/lm-tts (Python 3.11)
+qwen-asr==0.0.6
+transformers==4.57.6
+nagisa==0.2.11
+soynlp==0.0.493
+qwen-omni-utils==0.0.9
+DyNet38==2.2
+# Base provides torch==2.8.0, accelerate, librosa, scipy, soundfile, fastapi,
+# uvicorn, python-multipart. LLM worker uses ../envs/sglang-omni separately.
