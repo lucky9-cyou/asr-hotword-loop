@@ -1,0 +1,309 @@
+[
+  {
+    "text": "你好，你好，我叫鱼明洞。鱼是年年有鱼的鱼。",
+    "expected": [
+      "余明洞"
+    ],
+    "words": [
+      "余明洞"
+    ],
+    "passed": true,
+    "result": {
+      "hotwords": [
+        {
+          "word": "余明洞",
+          "evidence": "我叫鱼明洞。鱼是年年有鱼的鱼",
+          "reason": "年年有鱼→年年有余，取余；只改名字中的鱼",
+          "updated_at": 1793956930.446952,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "updates": [
+        {
+          "action": "add",
+          "word": "余明洞",
+          "evidence": "我叫鱼明洞。鱼是年年有鱼的鱼",
+          "reason": "年年有鱼→年年有余，取余；只改名字中的鱼",
+          "updated_at": 1793956930.446952,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "llm": {
+        "candidates": [
+          {
+            "word": "余明洞",
+            "evidence": "我叫鱼明洞。鱼是年年有鱼的鱼",
+            "reason": "年年有鱼→年年有余，取余；只改名字中的鱼"
+          }
+        ],
+        "raw_output": "{\"candidates\":[{\"evidence\":\"我叫鱼明洞。鱼是年年有鱼的鱼\",\"reason\":\"年年有鱼→年年有余，取余；只改名字中的鱼\",\"word\":\"余明洞\"}]}",
+        "model": "Qwen3.8-27B",
+        "elapsed_ms": 3644.7,
+        "warnings": [],
+        "source": "local_llm",
+        "device": "cuda:1"
+      }
+    }
+  },
+  {
+    "text": "我叫李旭，姓李。旭是春风和煦的旭。",
+    "expected": [
+      "李煦"
+    ],
+    "words": [
+      "李煦"
+    ],
+    "passed": true,
+    "result": {
+      "hotwords": [
+        {
+          "word": "李煦",
+          "evidence": "我叫李旭，姓李。旭是春风和煦的旭",
+          "reason": "春风和煦→春风和煦，取煦；只改名字中的旭",
+          "updated_at": 1793956934.2051709,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "updates": [
+        {
+          "action": "add",
+          "word": "李煦",
+          "evidence": "我叫李旭，姓李。旭是春风和煦的旭",
+          "reason": "春风和煦→春风和煦，取煦；只改名字中的旭",
+          "updated_at": 1793956934.2051709,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "llm": {
+        "candidates": [
+          {
+            "word": "李煦",
+            "evidence": "我叫李旭，姓李。旭是春风和煦的旭",
+            "reason": "春风和煦→春风和煦，取煦；只改名字中的旭"
+          }
+        ],
+        "raw_output": "{\"candidates\":[{\"evidence\":\"我叫李旭，姓李。旭是春风和煦的旭\",\"reason\":\"春风和煦→春风和煦，取煦；只改名字中的旭\",\"word\":\"李煦\"}]}",
+        "model": "Qwen3.8-27B",
+        "elapsed_ms": 3754.0,
+        "warnings": [],
+        "source": "local_llm",
+        "device": "cuda:1"
+      }
+    }
+  },
+  {
+    "text": "我叫王丽，是茉莉的莉。",
+    "expected": [
+      "王莉"
+    ],
+    "words": [
+      "王莉"
+    ],
+    "passed": true,
+    "result": {
+      "hotwords": [
+        {
+          "word": "王莉",
+          "evidence": "我叫王丽，是茉莉的莉",
+          "reason": "茉莉的莉→取莉；只改名字中的丽",
+          "updated_at": 1793956937.2670012,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "updates": [
+        {
+          "action": "add",
+          "word": "王莉",
+          "evidence": "我叫王丽，是茉莉的莉",
+          "reason": "茉莉的莉→取莉；只改名字中的丽",
+          "updated_at": 1793956937.2670012,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "llm": {
+        "candidates": [
+          {
+            "word": "王莉",
+            "evidence": "我叫王丽，是茉莉的莉",
+            "reason": "茉莉的莉→取莉；只改名字中的丽"
+          }
+        ],
+        "raw_output": "{\"candidates\":[{\"evidence\":\"我叫王丽，是茉莉的莉\",\"reason\":\"茉莉的莉→取莉；只改名字中的丽\",\"word\":\"王莉\"}]}",
+        "model": "Qwen3.8-27B",
+        "elapsed_ms": 3057.8,
+        "warnings": [],
+        "source": "local_llm",
+        "device": "cuda:1"
+      }
+    }
+  },
+  {
+    "text": "我姓鱼，鱼虾的鱼，不是多余的余，名字叫明洞。",
+    "expected": [
+      "鱼明洞"
+    ],
+    "words": [
+      "鱼明洞"
+    ],
+    "passed": true,
+    "result": {
+      "hotwords": [
+        {
+          "word": "鱼明洞",
+          "evidence": "我姓鱼，鱼虾的鱼，不是多余的余，名字叫明洞",
+          "reason": "鱼虾的鱼→取鱼；明确否定余；名字明洞无解释保留",
+          "updated_at": 1793956941.3519623,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "updates": [
+        {
+          "action": "add",
+          "word": "鱼明洞",
+          "evidence": "我姓鱼，鱼虾的鱼，不是多余的余，名字叫明洞",
+          "reason": "鱼虾的鱼→取鱼；明确否定余；名字明洞无解释保留",
+          "updated_at": 1793956941.3519623,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "llm": {
+        "candidates": [
+          {
+            "word": "鱼明洞",
+            "evidence": "我姓鱼，鱼虾的鱼，不是多余的余，名字叫明洞",
+            "reason": "鱼虾的鱼→取鱼；明确否定余；名字明洞无解释保留"
+          }
+        ],
+        "raw_output": "{\"candidates\":[{\"evidence\":\"我姓鱼，鱼虾的鱼，不是多余的余，名字叫明洞\",\"reason\":\"鱼虾的鱼→取鱼；明确否定余；名字明洞无解释保留\",\"word\":\"鱼明洞\"}]}",
+        "model": "Qwen3.8-27B",
+        "elapsed_ms": 4080.9,
+        "warnings": [],
+        "source": "local_llm",
+        "device": "cuda:1"
+      }
+    }
+  },
+  {
+    "text": "我叫余明洞，余是年年有余的余。",
+    "expected": [
+      "余明洞"
+    ],
+    "words": [
+      "余明洞"
+    ],
+    "passed": true,
+    "result": {
+      "hotwords": [
+        {
+          "word": "余明洞",
+          "evidence": "我叫余明洞，余是年年有余的余",
+          "reason": "年年有余→年年有余，取余；确认姓为余，名保留原转写",
+          "updated_at": 1793956945.2585692,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "updates": [
+        {
+          "action": "add",
+          "word": "余明洞",
+          "evidence": "我叫余明洞，余是年年有余的余",
+          "reason": "年年有余→年年有余，取余；确认姓为余，名保留原转写",
+          "updated_at": 1793956945.2585692,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "llm": {
+        "candidates": [
+          {
+            "word": "余明洞",
+            "evidence": "我叫余明洞，余是年年有余的余",
+            "reason": "年年有余→年年有余，取余；确认姓为余，名保留原转写"
+          }
+        ],
+        "raw_output": "{\"candidates\":[{\"evidence\":\"我叫余明洞，余是年年有余的余\",\"reason\":\"年年有余→年年有余，取余；确认姓为余，名保留原转写\",\"word\":\"余明洞\"}]}",
+        "model": "Qwen3.8-27B",
+        "elapsed_ms": 3902.4,
+        "warnings": [],
+        "source": "local_llm",
+        "device": "cuda:1"
+      }
+    }
+  },
+  {
+    "text": "你好你好，今天的天气不错。",
+    "expected": [],
+    "words": [],
+    "passed": true,
+    "result": {
+      "hotwords": [],
+      "updates": [],
+      "llm": {
+        "candidates": [],
+        "raw_output": "{\"candidates\":[]}",
+        "model": "Qwen3.8-27B",
+        "elapsed_ms": 767.2,
+        "warnings": [],
+        "source": "local_llm",
+        "device": "cuda:1"
+      }
+    }
+  },
+  {
+    "text": "我叫张明洞。",
+    "expected": [
+      "张明洞"
+    ],
+    "words": [
+      "张明洞"
+    ],
+    "passed": true,
+    "result": {
+      "hotwords": [
+        {
+          "word": "张明洞",
+          "evidence": "我叫张明洞",
+          "reason": "明确自我介绍，没有额外解释，保留原转写",
+          "updated_at": 1793956948.8450475,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "updates": [
+        {
+          "action": "add",
+          "word": "张明洞",
+          "evidence": "我叫张明洞",
+          "reason": "明确自我介绍，没有额外解释，保留原转写",
+          "updated_at": 1793956948.8450475,
+          "sequence": 0,
+          "count": 1
+        }
+      ],
+      "llm": {
+        "candidates": [
+          {
+            "word": "张明洞",
+            "evidence": "我叫张明洞",
+            "reason": "明确自我介绍，没有额外解释，保留原转写"
+          }
+        ],
+        "raw_output": "{\"candidates\":[{\"evidence\":\"我叫张明洞\",\"reason\":\"明确自我介绍，没有额外解释，保留原转写\",\"word\":\"张明洞\"}]}",
+        "model": "Qwen3.8-27B",
+        "elapsed_ms": 2812.1,
+        "warnings": [],
+        "source": "local_llm",
+        "device": "cuda:1"
+      }
+    }
+  }
+]

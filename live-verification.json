@@ -2014,20 +2014,22 @@
     ],
     "model": "/workspace/model/Qwen3-ASR-0.6B",
     "device": "cuda:0",
-    "elapsed_s": 6.146,
+    "elapsed_s": 4.274,
     "audio_seconds": 6.0,
     "bias": 8.0,
     "hotwords_applied": [],
     "probability_note": "真实 Qwen3-ASR logits；同一音频和偏置解码前缀下，完整词表 softmax 偏置前/后概率。不是整词置信度。",
     "sequence": 1,
+    "action": "transcribe",
+    "mode": "transcribe",
     "applied_hotwords": [],
     "duration_s": 6.0,
     "hotwords": [
       {
         "word": "李煦",
         "evidence": "我姓李，名字的第二个字是春风和煦的最后一个字",
-        "reason": "春风和煦的最后一个字是煦，确定名字用煦，姓李不变",
-        "updated_at": 1793955055.7850702,
+        "reason": "春风和煦→取最后一个字‘煦’；姓李，名煦",
+        "updated_at": 1793956985.9478185,
         "sequence": 1,
         "count": 1
       }
@@ -2037,8 +2039,8 @@
         "action": "add",
         "word": "李煦",
         "evidence": "我姓李，名字的第二个字是春风和煦的最后一个字",
-        "reason": "春风和煦的最后一个字是煦，确定名字用煦，姓李不变",
-        "updated_at": 1793955055.7850702,
+        "reason": "春风和煦→取最后一个字‘煦’；姓李，名煦",
+        "updated_at": 1793956985.9478185,
         "sequence": 1,
         "count": 1
       }
@@ -2048,12 +2050,12 @@
         {
           "word": "李煦",
           "evidence": "我姓李，名字的第二个字是春风和煦的最后一个字",
-          "reason": "春风和煦的最后一个字是煦，确定名字用煦，姓李不变"
+          "reason": "春风和煦→取最后一个字‘煦’；姓李，名煦"
         }
       ],
-      "raw_output": "{\"candidates\":[{\"evidence\":\"我姓李，名字的第二个字是春风和煦的最后一个字\",\"reason\":\"春风和煦的最后一个字是煦，确定名字用煦，姓李不变\",\"word\":\"李煦\"}]}",
+      "raw_output": "{\"candidates\":[{\"evidence\":\"我姓李，名字的第二个字是春风和煦的最后一个字\",\"reason\":\"春风和煦→取最后一个字‘煦’；姓李，名煦\",\"word\":\"李煦\"}]}",
       "model": "Qwen3.8-27B",
-      "elapsed_ms": 5439.9,
+      "elapsed_ms": 3812.9,
       "warnings": [],
       "source": "local_llm",
       "device": "cuda:1"
@@ -3974,7 +3976,7 @@
     ],
     "model": "/workspace/model/Qwen3-ASR-0.6B",
     "device": "cuda:0",
-    "elapsed_s": 2.288,
+    "elapsed_s": 1.533,
     "audio_seconds": 6.24,
     "bias": 8.0,
     "hotwords_applied": [
@@ -3982,6 +3984,8 @@
     ],
     "probability_note": "真实 Qwen3-ASR logits；同一音频和偏置解码前缀下，完整词表 softmax 偏置前/后概率。不是整词置信度。",
     "sequence": 2,
+    "action": "transcribe",
+    "mode": "transcribe",
     "applied_hotwords": [
       "李煦"
     ],
@@ -3990,8 +3994,8 @@
       {
         "word": "李煦",
         "evidence": "我姓李，名字的第二个字是春风和煦的最后一个字",
-        "reason": "春风和煦的最后一个字是煦，确定名字用煦，姓李不变",
-        "updated_at": 1793955055.7850702,
+        "reason": "春风和煦→取最后一个字‘煦’；姓李，名煦",
+        "updated_at": 1793956985.9478185,
         "sequence": 1,
         "count": 1
       }
@@ -4001,7 +4005,7 @@
       "candidates": [],
       "raw_output": "{\"candidates\":[]}",
       "model": "Qwen3.8-27B",
-      "elapsed_ms": 1035.4,
+      "elapsed_ms": 712.8,
       "warnings": [],
       "source": "local_llm",
       "device": "cuda:1"

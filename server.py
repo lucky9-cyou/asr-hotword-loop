@@ -1,4 +1,4 @@
-"""Local Qwen ASR → LLM → persistent session hotword loop."""
+"""Whole-recording ASR calls that use current hotwords and learn for the next call."""
 import asyncio
 import json
 import os
@@ -72,7 +72,7 @@ async def status():
     return dict(asr_model=ASR_MODEL, llm_model=LLM_MODEL,
                 device=f"ASR {os.getenv('ASR_DEVICE','cuda:0')} · LLM {os.getenv('LLM_DEVICE','cuda:1')}",
                 ready=all(key in engines and engines[key].status().get('loaded',False) for key in ('asr','llm')),
-                errors=engine_errors, mode='local_models', streaming='sequential audio chunks, next-chunk hotword updates')
+                errors=engine_errors, mode='local_models', workflow='manual_calls', streaming=False, max_audio_seconds=30)
 
 @app.post('/api/warmup')
 async def warmup():
@@ -142,56 +142,72 @@ async def learn_text(sid: str, request: LearnRequest):
             session.emit('error', error=str(exc))
             raise HTTPException(503, f'LLM 提取失败：{exc}')
 
-@app.post('/api/sessions/{sid}/chunk')
-async def chunk(sid: str, file: UploadFile=File(...), bias: float=Form(8.0)):
+async def process_audio(sid: str, file: UploadFile, bias: float):
+    """Use a hotword snapshot for ASR, then update memory for the next call."""
+    action = 'transcribe'
     if not 0 <= bias <= 8 or not np.isfinite(bias):
-        raise HTTPException(422,'偏置强度应在 0–8 之间')
-    session=get_session(sid)
-    data=await file.read(12*1024*1024+1)
-    if len(data)>12*1024*1024:
-        raise HTTPException(413,'单块音频最大 12 MB')
-    path=None
+        raise HTTPException(422, '偏置强度应在 0–8 之间')
+    session = get_session(sid)
+    data = await file.read(12*1024*1024+1)
+    if len(data) > 12*1024*1024:
+        raise HTTPException(413, '单次音频最大 12 MB')
+    path = None
     try:
-        with tempfile.NamedTemporaryFile(suffix='.wav',delete=False,dir=ROOT/'tmp') as tmp:
+        with tempfile.NamedTemporaryFile(suffix='.wav', delete=False, dir=ROOT/'tmp') as tmp:
             tmp.write(data)
-            path=tmp.name
+            path = tmp.name
         try:
-            info=sf.info(path)
+            info = sf.info(path)
             if not 0.1 <= info.duration <= 30:
-                raise ValueError('音频块应为 0.1–30 秒')
-            if info.channels>2 or info.samplerate<8000 or info.samplerate>96000:
+                raise ValueError('单次完整音频应为 0.1–30 秒，不会自动切块')
+            if info.channels > 2 or info.samplerate < 8000 or info.samplerate > 96000:
                 raise ValueError('请上传 8–96 kHz 单声道或双声道 WAV')
         except Exception as exc:
-            raise HTTPException(422,f'无法读取音频：{exc}')
+            raise HTTPException(422, f'无法读取音频：{exc}')
         async with session.lock, inference_lock:
-            t=time.monotonic()
-            session.sequence+=1
-            words=list(session.hotwords)
-            session.emit('asr_start',sequence=session.sequence,hotwords=words)
+            started = time.monotonic()
+            session.sequence += 1
+            words = list(session.hotwords)
+            session.emit('asr_start', sequence=session.sequence, hotwords=words, action=action)
             try:
-                result=await asyncio.to_thread(get_asr().transcribe,path,words,bias)
+                result = await asyncio.to_thread(get_asr().transcribe, path, words, bias)
             except Exception as exc:
-                session.emit('error',error=str(exc))
-                raise HTTPException(503,f'ASR 推理失败：{exc}')
-            session.emit('asr_done',sequence=session.sequence,**result)
-            transcript=result.get('biased','')
-            session.history.append(dict(sequence=session.sequence,baseline=result.get('baseline',''),biased=transcript))
-            session.history=session.history[-100:]
-            context='\n'.join(x['biased'] for x in session.history[-6:])[-4000:]
-            learned=dict(hotwords=list(session.hotwords.values()),updates=[],llm={})
+                session.emit('error', error=str(exc))
+                raise HTTPException(503, f'ASR 推理失败：{exc}')
+            session.emit('asr_done', sequence=session.sequence, action=action, **result)
+            transcript = result.get('biased', '')
+            session.history.append(dict(sequence=session.sequence, action=action,
+                                        baseline=result.get('baseline', ''), biased=result.get('biased', '')))
+            session.history = session.history[-100:]
+            learned = dict(hotwords=list(session.hotwords.values()), updates=[], llm={})
             if transcript.strip():
+                context = '\n'.join(x['biased'] for x in session.history[-6:])[-4000:]
                 try:
-                    learned=await learn(session,context)
+                    learned = await learn(session, context)
                 except Exception as exc:
-                    learned['llm']=dict(error=str(exc))
-                    session.emit('error',error=f'LLM 更新失败，保留已有热词：{exc}')
-            result.update(sequence=session.sequence, applied_hotwords=words,
-                          duration_s=info.duration,elapsed_s=round(time.monotonic()-t,3),**learned)
-            session.emit('chunk_done',sequence=session.sequence,elapsed_s=result['elapsed_s'])
+                    learned['llm'] = dict(error=str(exc))
+                    session.emit('error', error=f'LLM 更新失败，保留已有热词：{exc}')
+            result.update(sequence=session.sequence, action=action, mode=action,
+                          applied_hotwords=words, duration_s=info.duration,
+                          elapsed_s=round(time.monotonic()-started, 3), **learned)
+            session.emit('request_done',
+                         sequence=session.sequence, action=action, elapsed_s=result['elapsed_s'])
             return result
     finally:
         if path:
             Path(path).unlink(missing_ok=True)
+
+
+@app.post('/api/sessions/{sid}/transcribe')
+async def transcribe_audio(sid: str, file: UploadFile=File(...), bias: float=Form(8.0)):
+    """Recognize one complete recording, then learn hotwords for future calls."""
+    return await process_audio(sid, file, bias)
+
+
+@app.post('/api/sessions/{sid}/chunk', deprecated=True)
+async def chunk(sid: str, file: UploadFile=File(...), bias: float=Form(8.0)):
+    """Compatibility URL for the same complete-recording operation; no slicing."""
+    return await process_audio(sid, file, bias)
 
 @app.get('/api/events/{sid}')
 async def events(sid: str):

@@ -22,6 +22,7 @@ CANDIDATE = {'word': '李煦', 'evidence': '春风和煦的煦', 'reason': '说�
 
 class FakeASR:
     def __init__(self):
+        self.transcripts = []
         self.calls = []
         self.failure = None
 
@@ -33,7 +34,9 @@ class FakeASR:
         self.calls.append({'words': list(hotwords), 'bias': bias, 'path': path})
         if self.failure:
             raise RuntimeError(self.failure)
-        if len(self.calls) == 1:
+        if self.transcripts:
+            baseline = self.transcripts.pop(0)
+        elif len(self.calls) == 1:
             baseline = INTRO
         else:
             baseline = '请把文件发给李旭。'
@@ -211,3 +214,72 @@ def test_unknown_session_returns_404(api):
     client, _, _, _ = api
     assert client.get('/api/sessions/unknown').status_code == 404
     assert client.post('/api/sessions/unknown/learn', json={'text': INTRO}).status_code == 404
+
+
+
+def transcribe(client, sid, duration=.3, bias=8, route='transcribe'):
+    return client.post(f'/api/sessions/{sid}/{route}',
+                       files={'file': ('utterance.wav', wav(duration), 'audio/wav')},
+                       data={'bias': str(bias)})
+
+
+def test_manual_calls_keep_learning_and_apply_updates_only_next_call(api):
+    client, sid, asr, llm = api
+    second_text = '请把文件发给李旭。我叫王丽，是茉莉的莉。'
+    asr.transcripts = [INTRO, second_text, '请联系李旭和王莉。']
+    first_response = transcribe(client, sid)
+    assert first_response.status_code == 200, first_response.text
+    first = first_response.json()
+    assert first['action'] == 'transcribe'
+    assert first['sequence'] == 1
+    assert first['applied_hotwords'] == []
+    assert [w['word'] for w in first['hotwords']] == ['李煦']
+    assert first['baseline'] == first['biased'] == INTRO
+    assert first['probabilities'] == [], 'HTTP must not invent probability traces.'
+    assert len(llm.calls) == 1
+
+    llm.candidates = [{'word': '王莉', 'evidence': '我叫王丽，是茉莉的莉', 'reason': '茉莉确定莉'}]
+    second_response = transcribe(client, sid)
+    assert second_response.status_code == 200, second_response.text
+    second = second_response.json()
+    assert second['sequence'] == 2
+    assert second['applied_hotwords'] == ['李煦']
+    assert second['biased'] == second_text.replace('李旭', '李煦')
+    assert [w['word'] for w in second['hotwords']] == ['李煦', '王莉']
+    assert second['updates'][0]['word'] == '王莉'
+    assert llm.calls[1]['existing'] == ['李煦']
+
+    llm.candidates = []
+    third_response = transcribe(client, sid)
+    assert third_response.status_code == 200, third_response.text
+    third = third_response.json()
+    assert third['sequence'] == 3
+    assert third['applied_hotwords'] == ['李煦', '王莉']
+    assert third['updates'] == []
+    assert len(asr.calls) == 3, 'Each complete recording causes one engine invocation.'
+    assert len(llm.calls) == 3, 'Every nonempty audio result continues learning.'
+    assert asr.calls[0]['words'] == []
+    assert asr.calls[1]['words'] == ['李煦']
+    assert asr.calls[2]['words'] == ['李煦', '王莉']
+    assert INTRO in llm.calls[2]['text']
+    assert '我叫王丽，是茉莉的莉' in llm.calls[2]['text']
+    assert client.get(f'/api/sessions/{sid}').json()['sequence'] == 3
+
+
+@pytest.mark.parametrize('route', ['transcribe', 'chunk'])
+def test_complete_audio_limit_is_enforced_without_splitting(api, route):
+    client, sid, asr, llm = api
+    response = transcribe(client, sid, duration=30.1, route=route)
+    assert response.status_code == 422
+    assert '不会自动切块' in response.json()['detail']
+    assert asr.calls == llm.calls == []
+
+
+def test_status_describes_manual_calls_and_old_mode_routes_are_absent(api):
+    client, sid, _, _ = api
+    status = client.get('/api/status').json()
+    assert status['workflow'] == 'manual_calls'
+    assert status['streaming'] is False
+    for removed_mode in ('extract', 'recognize'):
+        response = client.post(f'/api/sessions/{sid}/{removed_mode}')
+        assert response.status_code == 404
